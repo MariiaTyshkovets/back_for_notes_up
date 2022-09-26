@@ -1,4 +1,5 @@
-import { IsString } from "class-validator";
+import { IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { CategoryType } from "../interfaces/interfaces";
 
 export class CreateNoteDto {
 
@@ -6,7 +7,9 @@ export class CreateNoteDto {
     readonly name: string;
 
     @IsString()
-    readonly category: string;
+    @IsNotEmpty()
+    @IsEnum(CategoryType)
+    readonly category: CategoryType;
 
     @IsString()
     readonly content: string;

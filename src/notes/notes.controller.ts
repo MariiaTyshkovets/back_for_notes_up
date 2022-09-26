@@ -1,5 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { IsMongoId } from 'class-validator';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { Stat } from './interfaces/interfaces';
@@ -12,6 +11,7 @@ export class NotesController {
     constructor (private readonly notesService: NotesService) {}
 
     @Get()
+    @HttpCode(HttpStatus.OK)
     getAll(): Promise<Note[]> {
         return this.notesService.getAll();
     }
@@ -27,6 +27,7 @@ export class NotesController {
     }
 
     @Post()
+    @HttpCode(HttpStatus.CREATED)
     @UsePipes(new ValidationPipe({ transform: true }))
     create(@Body() createNoteDto: CreateNoteDto): Promise<Note> {
         return this.notesService.create(createNoteDto);

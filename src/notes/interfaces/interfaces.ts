@@ -1,6 +1,6 @@
 export type NoteType = {
     name: string,
-    category: string,
+    category: CategoryType,
     content: string,
     created: number,
     dates: string
@@ -14,4 +14,10 @@ type State = {
 export type Stat = {
     name: string,
     state: State
+}
+
+export enum CategoryType {
+    TASK = "Task",
+    RANDOMTHOUGHT = "Random Thought",
+    IDEA = "Idea"
 }

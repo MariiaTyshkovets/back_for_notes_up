@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateNoteDto } from './dto/create-note.dto'; 
 import { UpdateNoteDto } from './dto/update-note.dto';
-import { Stat } from './interfaces/interfaces';
+import { CategoryType, Stat } from './interfaces/interfaces';
 import { Note, NoteDocument } from './schemas/note.schema';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class NotesService {
 
     constructor(@InjectModel(Note.name) private notesModel: Model<NoteDocument>) {}
 
-    statNames: string[] = ["Task", "Random Thought", "Idea"];
+    statNames: string[] = [CategoryType.TASK, CategoryType.RANDOMTHOUGHT, CategoryType.IDEA];
     stats: Stat[] = [];
 
     async getAll(): Promise<Note[]> {
