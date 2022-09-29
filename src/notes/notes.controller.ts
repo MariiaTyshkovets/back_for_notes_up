@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
-import { UpdateNoteDto } from './dto/update-note.dto';
+import { UpdateNoteDto, UpdatePartialNoteDto } from './dto/update-note.dto';
 import { Stat } from './interfaces/interfaces';
 import { NotesService } from './notes.service';
 import { Note } from './schemas/note.schema';
@@ -38,9 +38,15 @@ export class NotesController {
         return this.notesService.remove(id);
     }
 
-    @Patch(":id")
+    @Put(":id")
     @UsePipes(new ValidationPipe({ transform: true }))
     update(@Body() updateNoteDto: UpdateNoteDto, @Param("id") id: string): Promise<Note> {
         return this.notesService.update(id, updateNoteDto);
+    }
+
+    @Patch(":id")
+    @UsePipes(new ValidationPipe({ transform: true }))
+    updatePartial(@Body() updatePartialNoteDto: UpdatePartialNoteDto, @Param("id") id: string): Promise<Note> {
+        return this.notesService.updateOne(id, updatePartialNoteDto);
     }
 }

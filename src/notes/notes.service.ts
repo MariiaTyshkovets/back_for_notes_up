@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateNoteDto } from './dto/create-note.dto'; 
-import { UpdateNoteDto } from './dto/update-note.dto';
+import { UpdateNoteDto, UpdatePartialNoteDto } from './dto/update-note.dto';
 import { CategoryType, Stat } from './interfaces/interfaces';
 import { Note, NoteDocument } from './schemas/note.schema';
 
@@ -65,4 +65,42 @@ export class NotesService {
             deleted: noteDto.deleted
         });
     }
-}
+
+    async updateOne(id: string, noteDto: UpdatePartialNoteDto): Promise<Note> {
+        let note = this.notesModel.findById(id).exec();
+        let active = (await note).active;
+        let archived = (await note).archived;
+        let deleted = (await note).deleted;
+        let name = (await note).noteContent.name;
+        let category = (await note).noteContent.category;
+        let content = (await note).noteContent.content;
+        let dates = (await note).noteContent.dates;
+        if (noteDto.active === false || noteDto.active) {
+            active = noteDto.active;
+        }
+        if (noteDto.archived === false || noteDto.archived) {
+            archived = noteDto.archived;
+        }
+        if (noteDto.deleted === false || noteDto.archived) {
+            deleted = noteDto.deleted;
+        }
+        if (noteDto.name) {
+            name = noteDto.name;
+        }
+        if (noteDto.category) {
+            category = noteDto.category;
+        }
+        if (noteDto.content) {
+            content = noteDto.content;
+        }
+        if (noteDto.dates) {
+            dates = noteDto.dates;
+        }
+        return this.notesModel.findByIdAndUpdate( id, {
+            noteContent: {name: name, category: category, content: content, dates: dates, created: Date.now()},
+            active: active,
+            archived: archived,
+            deleted: deleted
+        })
+    }
+}   
